@@ -1,0 +1,605 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<nav class="nav-container hide-mobile-active">
+  <ul class="nav-links-room">
+    <li class="logo-room hide-mobile-active"><img class="logo"src="{{ url_for('static', filename= 'img/b-logo.png')}}" alt="LOGO"></li>
+    <li class="item"><a href="{{ url_for('main.home') }}"><i class="fas fa-home fa-2x navicon overlay-home"></i></a></li>
+    <!-- <li class="item"><a href="#"><i class="fas fa-heart fa-2x navicon overlay-home"></i></a></li> -->
+    <!-- <li class="item"><a href="#"><i class="fas fa-bell fa-2x navicon overlay-home"></i></a></li> -->
+    <!-- <li class="item"><a href="#"><i class="fas fa-cog fa-2x navicon overlay-home"></i></a></li> -->
+    <li class="item"><a href="{{ url_for('users.account') }}"><i class="fas fa-user fa-2x navicon overlay-home"></i></a></li>
+    {% if current_user.is_authenticated%}
+    <li class="item"><a href="{{ url_for('users.logout') }}"><i class="fa fa-sign-out fa-2x navicon overlay-home"></i></a></li>
+    {% else %}
+    {% endif %}
+  </ul>
+</nav>
+
+<div class="mobile-room-nav-container show-mobile-active">
+  <div class="mobile-room-nav-wrapper">
+    {% if room.room_creator == current_user%}
+      <i onclick="createRoom()" type="button"  data-toggle="modal" data-target="#deleteModal" class="fas fa-door-open fa-2x"></i>
+      {% else%}
+      <a href={{ url_for('main.home')}} ><i class="fas fa-door-open fa-2x"></i></a>
+      <!-- <a href={{ url_for('main.home')}}> Leave Chat for <p class="leave-room">LEAVE ROOM</p> </a> -->
+
+      {% endif %}
+      <!-- <img class="rounded-circle article-img-mobile" src="{{image_file}}" alt=""> -->
+    <p>{{ room.title }}</p>
+
+
+  </div>
+
+
+</div>
+<!-- <section class="top-bar show-mobile-active" >
+  <div class="menu" id="menu">
+    <a href="#" onclick="openNav()"class="openBtn"><i class="fa fa-bars"></i> </a>
+  </div>
+</section>
+<section class="home-overlay show-mobile-active" id="nav">
+  <a href="#" onclick="closeNav()"class="closeBtn">&times;</a>
+  <div class="overlay-content">
+    <div class="nav-img">
+      <img class="nav-logo"src="{{ url_for('static', filename= 'img/b-logo.png')}}" alt="LOGO">
+    </div>
+    <div class="nav-user-profile">
+      <i class="fas fa-user fa-2x"></i>
+      <p class="nav-name">Dj babushka</p>
+    </div>
+    <div class="nav-content">
+      <a href="{{ url_for('main.home') }}"><i class="fas fa-user "></i> &nbsp;&nbsp;Home</a>
+      <a href="{{ url_for('users.account') }}"><i class="fas fa-user "></i> &nbsp;&nbsp;Profile</a>
+      <a href="{{ url_for('users.logout') }}"><i class="fas fa-home "></i> &nbsp;&nbsp;Logout</a>
+
+    </div>
+  </div>
+</section> -->
+
+<section class="room-showcase-container ">
+  <div class="disco-room-container">
+    <!-- <p>disco room</p> -->
+    <div class="turntable-top">
+      <div class="avatar-container">
+        <img class="article-img-mobile" src="{{ url_for('static', filename= 'img/' + room.room_creator.image_file) }}" alt="">
+      </div>
+      <div class="laptop-container">
+        <img class="avatar-laptop" src="{{ url_for('static', filename= 'img/current-laptop.png')}}" alt="">
+      </div>
+      <div class="become-dj-container">
+        <!-- <img class="become-dj" src="{{ url_for('static', filename= 'img/clickDj.png')}}" alt=""> -->
+      </div>
+    </div>
+    <div class="turntable-container">
+      <img class="turntable" src="{{ url_for('static', filename= 'img/turntable.png')}}" alt="">
+
+    </div>
+    <div class="users-in-room">
+      <img class="article-img-mobile" src="{{ url_for('static', filename= 'img/' + room.room_creator.image_file) }}" alt="">
+      <img class="article-img-mobile" src="{{ url_for('static', filename= 'img/' + room.room_creator.image_file) }}" alt="">
+      <img class="article-img-mobile" src="{{ url_for('static', filename= 'img/' + room.room_creator.image_file) }}" alt="">
+    </div>
+
+  </div>
+  <div class="room-chat-container">
+    <div class="room-chat-nav">
+      <p>{{ room.title }}</p>
+      <div class="room-chat-nav-icons">
+
+
+        {% if room.room_creator == current_user%}
+          <!-- <a href="{{ url_for('rooms.update_room', room_id=room.id) }}">Update</a> -->
+          <i onclick="createRoom()" type="button"  data-toggle="modal" data-target="#deleteModal" class="fas fa-door-open fa-2x"></i>
+        {% else%}
+        <a class="leave-room" href={{ url_for('main.home')}} ><i class="fas fa-door-open fa-2x"></i></a>
+        {% endif %}
+        <!-- <a class="leave-room" href={{ url_for('main.home')}} >Leave</a> -->
+
+      </div>
+    </div>
+
+    <section class="room-tabs">
+      <div class="room-tab-container">
+        <div class="index-tab-item index-tab-border" id="tab-1">
+          <p class="">DJ's Playlists</p>
+        </div>
+        <div class="index-tab-item " id="tab-2">
+          <p class="">Listeners (22)</p>
+        </div>
+        <div class="index-tab-item" id="tab-3">
+          <p class="" >Chat</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="room-tab-content">
+      <div class="room-tab-container">
+
+        <div class="index-tab-content-item show" id="tab-1-content">
+          <div class=" room-tab room-tab-1-content-inner">
+            <div class="playlist">
+              <!-- <img id="current-track"/> -->
+              <!-- <h3 id="current-track-name"></h3> -->
+              <!-- <a class=" select-song-room" href="">Get started!</a> -->
+              <!-- <button class="select-room-container" ><p class="select-song-room">Get listening</p> </button> -->
+              <!-- <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>Stargazing</p>
+                  <p>Travis Scott</p>
+                  <p>4:22</p>
+
+                </div>
+              </a>
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>Stargazing</p>
+                  <p>Travis Scott</p>
+                  <p>4:22</p>
+
+                </div>
+              </a>
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>Stargazing</p>
+                  <p>Travis Scott</p>
+                  <p>4:22</p>
+
+                </div>
+              </a> -->
+              <p class="leave-room-song">Leave</p>
+
+                <div class="chat" id="display-message-section-song">
+                  <button class="select-room-container" ><p class="select-room-song">JOIN ROOM</p> </button>
+                </div>
+
+              <div class="room-chat-input-box">
+                <div class="chat-input">
+                  <!-- {{ form.hidden_tag() }}
+                  {{ form.description(class="form-control form-control-lg user_message") }} -->
+                  <!-- {{ form.submit(class="btn btn-outline-info send_message") }} -->
+                  <!-- <img id="current-track"/> -->
+                  <h3 id="current-track-name"></h3>
+                  <h3 id="current-track-uri"></h3>
+                  <h3 id="current-device-id"></h3>
+
+                  <input type="text" id="user_message-song" class="user_message-song"  autocomplete="off">
+                  <button type="button" id="send_message-song" class="send_message-song">SEND</button>
+                </div>
+                <!-- input message -->
+                <!-- <div class="input-area">
+                  <input type="text" id="user_message" class="user_message" placeholder="type message" autocomplete="off">
+                  <button type="button" id="send_message" class="send_message">SEND</button>
+                </div> -->
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="index-tab-content-item" id="tab-2-content">
+          <div class="room-tab room-tab-2-content-inner">
+            <div class="Listeners">
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>IMAGE</p>
+                  <p>USERNAME</p>
+                  <p>...</p>
+
+                </div>
+              </a>
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>IMAGE</p>
+                  <p>USERNAME</p>
+                  <p>...</p>
+
+                </div>
+              </a>
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>IMAGE</p>
+                  <p>USERNAME</p>
+                  <p>...</p>
+
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="index-tab-content-item" id="tab-3-content">
+          <div class="room-tab room-tab-3-content-inner">
+            <div class="chat" id="display-message-section">
+              <button class="select-room-container" ><p class="select-room">JOIN ROOM</p> </button>
+            </div>
+          </div>
+          <div class="room-chat-input-box">
+            <div class="chat-input">
+              <!-- {{ form.hidden_tag() }}
+              {{ form.description(class="form-control form-control-lg user_message") }} -->
+              <!-- {{ form.submit(class="btn btn-outline-info send_message") }} -->
+              <input type="text" id="user_message" class="user_message"  autocomplete="off">
+              <button type="button" id="send_message" class="send_message">SEND</button>
+            </div>
+            <!-- input message -->
+            <!-- <div class="input-area">
+              <input type="text" id="user_message" class="user_message" placeholder="type message" autocomplete="off">
+              <button type="button" id="send_message" class="send_message">SEND</button>
+            </div> -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</section>
+
+
+
+
+
+
+<!-- <section class="mobile-room-showcase-container show-mobile-active">
+
+  <div class="mobile-disco-room-container">
+
+    <div class="mobile-turntable-top">
+      <div class="mobile-avatar-container">
+      </div>
+      <div class="mobile-laptop-container">
+
+        <img class="mobile-avatar-laptop" src="{{ url_for('static', filename= 'img/current-laptop.png')}}" alt="">
+
+      </div>
+
+    </div>
+    <div class="mobile-turntable-container">
+      <img class="mobile-turntable" src="{{ url_for('static', filename= 'img/turntable.png')}}" alt="">
+    </div>
+
+
+    <div class="interaction">
+      <a href="#"><i class="fa fa-thumbs-up fa-2x"><p class="interaction-count">100</p></i></a>
+      <a href="#"><i class="fa fa-thumbs-down fa-2x"><p class="interaction-count">100</p></i></a>
+    </div>
+  </div>
+
+  <section class="mobile-nav-footer">
+    <div class="room-tabs">
+      <div class="room-tab-container">
+        <div class="index-tab-item index-tab-border" id="tab-1">
+          <p class="">DJ's Playlists</p>
+        </div>
+        <div class="index-tab-item " id="tab-2">
+          <p class="">Listeners (22)</p>
+        </div>
+        <div class="index-tab-item" id="tab-3">
+          <p class="" >Chat</p>
+        </div>
+      </div>
+    </div>
+
+
+    <section class="room-tab-content">
+      <div class="room-tab-container">
+
+        <div class="index-tab-content-item show" id="tab-1-content-mobile">
+          <div class=" room-tab room-tab-1-content-inner">
+            <div class="playlist">
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>Stargazing</p>
+                  <p>Travis Scott</p>
+                  <p>4:22</p>
+
+                </div>
+              </a>
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>Stargazing</p>
+                  <p>Travis Scott</p>
+                  <p>4:22</p>
+
+                </div>
+              </a>
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>Stargazing</p>
+                  <p>Travis Scott</p>
+                  <p>4:22</p>
+
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="index-tab-content-item" id="tab-2-content-mobile">
+          <div class="room-tab room-tab-2-content-inner">
+            <div class="Listeners">
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>IMAGE</p>
+                  <p>USERNAME</p>
+                  <p>...</p>
+
+                </div>
+              </a>
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>IMAGE</p>
+                  <p>USERNAME</p>
+                  <p>...</p>
+
+                </div>
+              </a>
+              <a href="#" class="song-list song">
+                <div class="song-list-layout">
+                  <p>IMAGE</p>
+                  <p>USERNAME</p>
+                  <p>...</p>
+
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="index-tab-content-item " id="tab-3-content-mobile">
+          <div class="room-tab room-tab-3-content-inner">
+            <div class="chat" id="display-message-section-mobile">
+              <button class="select-room-container" ><p class="select-room">JOIN ROOM</p> </button>
+            </div>
+          </div>
+          <div class="room-chat-input-box">
+            <div class="chat-input">
+              <input type="text" id="user_message_mobile" class="user_message"  autocomplete="off">
+              <button type="button" id="send_message_mobile" class="send_message">SEND</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </section>
+  </section> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- get username -->
+<script type="text/javascript">
+  const username = `{{username}}`;
+  const room_name = `{{room.title}}`;
+  const room_id = `{{room.id}}`;
+
+</script>
+
+
+
+
+<!-- Modal -->
+<section class="create-room-overlay" id="create-room-overlay">
+  <div class="create-room-overlay-laptop">
+    <div class="create-room-overlay-top">
+      <p class="create-room-overlay-top-left" >Exit room</p>
+      <div class="create-room-overlay-top-right">
+        <a href="#"><i class="far fa-times-circle fa-2x close-room-Btn" onclick="createRoomClose()"></i></a>
+
+      </div>
+
+    </div>
+    <p>Are you sure you want to delete this room</p>
+    <form action="{{ url_for('rooms.delete_room',room_id=room.id )}}" class="" method="post">
+      <input class="btn btn-primary btn-sm m-1" type="submit" name="" value="Delete">
+    </form>
+    <!-- <a href="#">close</a> -->
+    <!-- <a href="#">Save changes</a> -->
+  </div>
+</section>
+<script>
+
+  // var Djdeviceid= xxx
+  // var Djdeviceid= xxx
+
+
+
+          // Get the hash of the url
+        const hash = window.location.hash
+        .substring(1)
+        .split('&')
+        .reduce(function (initial, item) {
+        if (item) {
+        var parts = item.split('=');
+        initial[parts[0]] = decodeURIComponent(parts[1]);
+        }
+        return initial;
+        }, {});
+        window.location.hash = '';
+
+        // Set token
+        let _token = hash.access_token;
+
+        const authEndpoint = 'https://accounts.spotify.com/authorize';
+
+        // Replace with your app's client ID, redirect URI and desired scopes
+        // const room_id = `{{room.id}}`;
+        const clientId = 'c509a483834947b6996a605c4750a7d1';
+        // const redirectUri = 'http://localhost:5000/room/'+room_id;
+        const redirectUri = `http://localhost:5000/room/${room_id}`;
+        const scopes = [
+        'streaming',
+        // 'user-read-birthdate',
+        'user-read-private',
+        'user-modify-playback-state'
+        ];
+
+        // If there is no token, redirect to Spotify authorization
+        if (!_token) {
+        window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+        }
+
+        // We don't need this
+        window.onSpotifyWebPlaybackSDKReady = () => {
+          console.log('lets see whats gqanning');
+        };
+
+        // async methods
+        async function waitForSpotifyWebPlaybackSDKToLoad () {
+        return new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if ('Spotify' in window) {
+            resolve(window.Spotify);
+            clearInterval(interval);
+          }
+        });
+        });
+        };
+
+        async function waitUntilUserHasSelectedPlayer (sdk) {
+        return new Promise((resolve) => {
+        let interval = setInterval(async () => {
+          let state = await sdk.getCurrentState();
+          if (state !== null) {
+            resolve();
+            clearInterval(interval);
+          }
+        });
+        });
+        };
+
+
+        // Play a specified track on the Web Playback SDK's device ID
+        async function play (device_id) {
+        return new Promise((resolve) => {
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            uris: ["spotify:track:4CmumTJeNPBmXYOhSI5D2L"]
+          }),
+          headers: {
+            Authorization: `Bearer ${_token}`
+          }
+        }).then(resolve);
+        });
+
+        }
+
+        window.onSpotifyWebPlaybackSDKReady = () => {};
+
+        async function waitForSpotifyWebPlaybackSDKToLoad () {
+        return new Promise(resolve => {
+        if (window.Spotify) {
+          resolve(window.Spotify);
+        } else {
+          window.onSpotifyWebPlaybackSDKReady = () => {
+            resolve(window.Spotify);
+          };
+        }
+        });
+        };
+
+        async function waitUntilUserHasSelectedPlayer (sdk) {
+        return new Promise(resolve => {
+        let interval = setInterval(async () => {
+          let state = await sdk.getCurrentState();
+          if (state !== null) {
+            resolve(state);
+            clearInterval(interval);
+          }
+        });
+        });
+        };
+
+        (async () => {
+        const { Player } = await waitForSpotifyWebPlaybackSDKToLoad();
+
+        const sdk = new Player({
+        name: "Quarantine Radio",
+        volume: 1.0,
+        getOAuthToken: callback => { callback(_token); }
+        });
+
+        // Playback state has changed
+        sdk.on("player_state_changed", state => {
+        let {
+          uri: track_uri,
+          name: track_name,
+          duration_ms,
+          artists,
+          album: {
+            images: [{ url: artwork_url }]
+          }
+        } = state.track_window.current_track;
+
+        console.log(state);
+        console.log(`This is uri ${track_uri}`);
+        console.log(`You're listening to ${track_name} by ${artists[0].name}!`);
+        $('#current-track').attr('src', artwork_url);
+        $('#current-track-name').text(track_name);
+        $('#current-track-uri').text(track_uri);
+        });
+
+        // Ready
+        sdk.on('ready', data => {
+        let { device_id } = data;
+
+        // Play a track using our new device ID
+        console.log('Ready with Device ID', device_id);
+        play(device_id);
+        $('#current-device-id').text(device_id);
+        });
+
+        let connected = await sdk.connect();
+        if (connected) {
+        console.log("Waiting for player to be selected ...");
+        let state = await waitUntilUserHasSelectedPlayer(sdk);
+        console.log("Player has been selected!");
+
+        await sdk.resume();
+        await sdk.setVolume(0.5);
+
+        let {
+          id,
+          uri: track_uri,
+          name: track_name,
+          duration_ms,
+          artists,
+          album: {
+            name: album_name,
+            uri: album_uri,
+            images: album_images
+          }
+        } = state.track_window.current_track;
+
+        console.log(`You're listening to ${track_name} by ${artists[0].name}!`);
+        } else {
+        console.error("Failed to connect Player");
+        }
+        })();
+
+
+
+</script>
+{% endblock body %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body id="sign-in-page">
+  <a href="{{ url_for('main.index') }}"> BACK TO HOME PAGE</a>
+<div class="l-form">
+  <div class="shape1"></div>
+  <div class="shape2"></div>
+  <div class="form">
+    <img class="form-img" src="{{ url_for('static', filename= 'img/login-img.svg')}}" alt="">
+
+    <form class="form-content" action="" method="POST">
+      {{ form.hidden_tag() }}
+      <h1 class="form-title"> Login </h1>
+      <div class="form-div form-div-signup">
+        <div class="form-icon">
+          <i class="far fa-envelope"></i>
+        </div>
+        <div class="form-div-input">
+          <!-- {{ form.email.label(class="form-label") }} -->
+          {% if form.email.errors %}
+            {{ form.email(class=" form-input is-invalid ") }}
+            <div class="invalid-feedback">
+              {% for error in form.email.errors %}
+              <span class="padding-left"> {{error}} </span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.email(class="form-input") }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="form-div form-div-signup">
+        <div class="form-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div class="form-div-input">
+          <!-- {{ form.password.label(class="form-label") }} -->
+          {% if form.password.errors %}
+            {{ form.password(class=" form-input is-invalid ") }}
+            <div class="invalid-feedback">
+              {% for error in form.password.errors %}
+              <span class="padding-left"> {{error}} </span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.password(class="form-input") }}
+          {% endif %}
+        </div>
+      </div>
+      <!-- <div class="">
+        {{ form.remember(class="form-check-input")}}
+        {{ form.remember.label(class="form-check-label")}}
+      </div> -->
+
+      <a class="create-account" href="{{ url_for('users.signup') }}"> Need an account? Sign up</a>
+      {{ form.submit(class="form-button") }}
+      <small class="text-muted ml-2">
+        <a href="{{ url_for('users.reset_request') }}">Fogot Passsword?</a>
+      </small>
+    </form>
+  </div>
+
+</div>
+{% endblock body %}

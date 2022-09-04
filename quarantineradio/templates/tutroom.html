@@ -1,0 +1,28 @@
+{% for room in rooms.items %}
+  <a href="{{ url_for('rooms.room',room_id=room.id)}}" class="btn btn-xl home-rooms m">
+    <img class="rounded-circle article-img hide-mobile-active" src="{{ url_for('static', filename= 'img/' + room.room_creator.image_file) }}" alt="">
+    <div class="room-info">
+        <!-- <p class="select-room">{{room}} </p> -->
+        <h1 class="select-room" >{{room.title }}</h1>
+        <p>By {{room.room_creator.username}} on {{room.date_posted.strftime('%Y-%m-%d')}}</p>
+        <!-- <a href="{{url_for('users.user_rooms', username=room.room_creator.username)}}"> Click {{room.room_creator.username}}</a> -->
+        <p>{{room.description}}</p>
+    </div>
+  </a>
+  {% endfor%}
+
+
+<div class="page_num">
+
+  {% for page_num in rooms.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num %}
+      {% if rooms .page == page_num %}
+        <a class="pagination fill" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+      {% else %}
+        <a class="pagination" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+      {% endif %}
+    {% else %}
+      ...
+    {% endif %}
+  {% endfor%}
+ </div>

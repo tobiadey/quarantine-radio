@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block body %}
+<header class="index-showcase">
+  <div class="index-showcase-top">
+    <img src="{{ url_for('static', filename= 'img/b-logo.png')}}" alt="LOGO">
+
+    {% if current_user.is_authenticated%}
+    <a href="{{ url_for('users.signin') }}" class="btn btn-rounded"> Back to QR</a>
+    {% else %}
+    <a href="{{ url_for('users.signin') }}" class="btn btn-rounded"> Sign in</a>
+    {% endif %}
+  </div>
+  <div class="index-showcase-content">
+    <h1>Find new music</h1>
+    <p>Join anywhere, anytime</p>
+    <a href="{{ url_for('main.home') }}" class="btn btn-xl">Experience DJ's Playlists</a>
+  </div>
+</header>
+
+<section class="index-tabs">
+  <div class="index-container">
+    <div class="index-tab-item index-tab-border" id="tab-1">
+      <i class="fas fa-tablet-alt fa-3x"></i>
+      <p class="hide-sm">Quarantine Radio</p>
+    </div>
+    <div class="index-tab-item" id="tab-2">
+      <i class="fas fa-door-open fa-3x"></i>
+      <p class="hide-sm">DJ Rooms</p>
+    </div>
+    <div class="index-tab-item" id="tab-3">
+      <i class="fas fa-tags fa-3x"></i>
+      <p class="hide-sm">Something else</p>
+    </div>
+  </div>
+</section>
+
+<section class="index-tab-content">
+  <div class="index-container">
+
+    <!-- tab content 1 -->
+    <div class="index-tab-content-item show" id="tab-1-content">
+      <div class="index-tab-1-content-inner">
+      <div class="">
+        <p class="text-lg">if you decide this isnt for you... no problem. No comitment. Cancel anytime.</p>
+        <a href="#" class="btn btn-lg">Join us now</a>
+      </div>
+        <img src="https://i.ibb.co/J2xDJV7/tab-content-1.png" alt="">
+      </div>
+    </div>
+    <!-- tab content 2 -->
+    <div class="index-tab-content-item" id="tab-2-content">
+      <div class="index-tab-2-content-top">
+        <p class="text-lg">Watch Dj shows anytime anywhere</p>
+        <a href="#" class="btn btn-lg"> Join us now</a>
+      </div>
+      <div class="index-tab-2-content-bottom">
+        <div>
+          <img src="https://i.ibb.co/DpdN7Gn/tab-content-2-1.png" alt="">
+          <p class="text-md">Watch on your tv</p>
+          <p class="text-dark">iphone,laptop</p>
+        </div>
+        <div>
+          <img src="https://i.ibb.co/DpdN7Gn/tab-content-2-1.png" alt="">
+          <p class="text-md">Watch on your tv</p>
+          <p class="text-dark">iphone,laptop</p>
+          </div>
+        <div>
+          <img src="https://i.ibb.co/DpdN7Gn/tab-content-2-1.png" alt="">
+          <p class="text-md">Use any computer</p>
+          <p class="text-dark">iphone,laptop</p>
+        </div>
+      </div>
+    </div>
+    <!-- tab content 3 -->
+    <div class="index-tab-content-item" id="tab-3-content">
+      hi
+    </div>
+
+  </div>
+</section>
+{% endblock body %}

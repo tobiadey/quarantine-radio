@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<nav class="nav-container hide-mobile-active">
+  <ul class="nav-links-2 ">
+    <li class="logo"><img class="logo"src="{{ url_for('static', filename= 'img/b-logo.png')}}" alt="LOGO"></li>
+    <li class="item"><a href="#"><i class="fas fa-home fa-2x navicon overlay-home"></i></a></li>
+    <!-- <li class="item"><a href="#"><i class="fas fa-heart fa-2x navicon overlay-home"></i></a></li> -->
+    <!-- <li class="item"><a href="#"><i class="fas fa-bell fa-2x navicon overlay-home"></i></a></li> -->
+    <!-- <li class="item"><a href="#"><i class="fas fa-cog fa-2x navicon overlay-home"></i></a></li> -->
+    <li class="item"><a href="{{ url_for('users.account') }}"><i class="fas fa-user fa-2x navicon overlay-home"></i></a></li>
+    {% if current_user.is_authenticated%}
+    <li class="item"><a href="{{ url_for('users.logout') }}"><i class="fa fa-sign-out fa-2x navicon overlay-home"></i></a></li>
+    {% else %}
+    {% endif %}
+
+  </ul>
+</nav>
+
+<section class="top-bar show-mobile-active" >
+  <div class="top-bar">
+    <div class="menu" id="menu">
+      <a href="#" onclick="openNav()"class="openBtn"><i class="fa fa-bars"></i> </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="home-overlay show-mobile-active" id="nav">
+  <a href="#" onclick="closeNav()"class="closeBtn">&times;</a>
+  <div class="overlay-content">
+    <div class="nav-img">
+      <img class="nav-logo"src="{{ url_for('static', filename= 'img/b-logo.png')}}" alt="LOGO">
+    </div>
+    <div class="nav-user-profile">
+
+
+
+
+          <img class="rounded-circle article-img-mobile" src="{{image_file}}" alt="">
+          <p class="nav-name">{{ current_user.username }}</p>
+
+
+    </div>
+    <div class="nav-content">
+      <a href="#"><i class="fas fa-user "></i> &nbsp;&nbsp;Home</a>
+      <a href="{{ url_for('users.account') }}"><i class="fas fa-user "></i> &nbsp;&nbsp;Profile</a>
+      <a href="{{ url_for('users.logout') }}"><i class="fas fa-home "></i> &nbsp;&nbsp;Logout</a>
+    </div>
+  </div>
+</section>
+
+<section class="home-showcase">
+  <div class="home-showcase-content">
+    <img class="logo-mobile show-mobile-active"src="{{ url_for('static', filename= 'img/b-logo.png')}}" alt="LOGO">
+    <div class="home-search-box">
+      <input class="input-box"type="text" placeholder="Search Room.." name="search">
+      <a class="search-btn" href="#">
+      <i class="fa fa-search "></i>
+      </a>
+    </div>
+    <div class="global-local">
+      <div class="global-local-mobile show-mobile-active ">
+      <button class="room-button-home room-button-home-active remove-border-right" type="button" name="button">Global Room</button>
+      <button class="room-button-home remove-border-left" type="button" name="button">Friends Room</button>
+      </div>
+      <div class="global-local-laptop hide-mobile-active">
+        <a href="#">
+          <i class="fas fa-user fa-2x global-icon-home"></i>
+        </a>
+        <a href="#">
+          <i class="fas fa-globe fa-2x global-icon-home"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="rooms" id="home-rooms">
+    {% for room in rooms.items %}
+      <a href="{{ url_for('rooms.room',room_id=room.id)}}" class="btn btn-xl home-rooms m">
+        <img class="rounded-circle article-img hide-mobile-active" src="{{ url_for('static', filename= 'img/' + room.room_creator.image_file) }}" alt="">
+        <div class="room-info">
+            <!-- <p class="select-room">{{room}} </p> -->
+            <h1>{{room.title }}</h1>
+            <p>By {{room.room_creator.username}} on {{room.date_posted.strftime('%Y-%m-%d')}}</p>
+            <!-- <a href="{{url_for('users.user_rooms', username=room.room_creator.username)}}"> Click {{room.room_creator.username}}</a> -->
+            <p>{{room.description}}</p>
+        </div>
+      </a>
+      {% endfor%}
+
+      <div class="page_num">
+
+      {% for page_num in rooms.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+          {% if rooms .page == page_num %}
+            <a class="pagination fill" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+          {% else %}
+            <a class="pagination" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+          {% endif %}
+        {% else %}
+          ...
+        {% endif %}
+      {% endfor%}
+     </div>
+
+      <a href="{{ url_for('rooms.post_new') }}" >
+        <button class="home-btn"><i class="fa fa-plus"></i></button>
+        <!-- <button class="home-btn" onclick="createRoom()"><i class="fa fa-plus"></i></button> -->
+      </a>
+    </div>
+    <!-- <div class="home-buttons">
+    </div> -->
+  </div>
+</section>
+
+<!-- <section class="create-room-overlay" id="create-room-overlay">
+  <div class="create-room-overlay-laptop">
+    <div class="create-room-overlay-top">
+      <p class="create-room-overlay-top-left" >Create Room</p>
+      <div class="create-room-overlay-top-right">
+        <a href="#"><i class="far fa-times-circle fa-2x close-room-Btn" onclick="createRoomClose()"></i></a>
+        <a href="#"><i class="fas fa-check-circle fa-2x"></i></a>
+      </div>
+    </div>
+
+    <input class="create-room-input" id="create-room-input" type="text" placeholder="Room Name">
+    <input class="create-room-input" id="create-room-input" type="text"placeholder="Description">
+    <input class="create-room-input" id="create-room-input" type="text" placeholder="Genre">
+  </div>
+</section> -->
+{% endblock body %}
